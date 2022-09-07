@@ -16,7 +16,25 @@
         android:theme="@style/Theme.SocialMediaApp"
         tools:targetApi="31">
         <activity
+            android:name=".loginandsignup.SignUpActivity"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".loginandsignup.LogInActivity"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".post.CreateImagePost"
+            android:exported="false" />
+        <activity
+            android:name=".post.CreateTextPost"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".Splashscreen"
+            android:noHistory="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +42,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".loginandsignup.LoginSignupActivity"
-            android:exported="true"></activity>
+<!--        <activity-->
+<!--            android:name=".loginandsignup.LoginSignupActivity"-->
+<!--            android:exported="true" />-->
     </application>
 
 </manifest>

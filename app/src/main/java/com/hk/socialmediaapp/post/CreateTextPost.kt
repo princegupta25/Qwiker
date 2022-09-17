@@ -9,6 +9,7 @@ import com.hk.socialmediaapp.databinding.ActivityCreateTextPostBinding
 
 class CreateTextPost : AppCompatActivity() {
     private lateinit var binding: ActivityCreateTextPostBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateTextPostBinding.inflate(layoutInflater)

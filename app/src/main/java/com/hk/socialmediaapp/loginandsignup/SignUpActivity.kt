@@ -35,12 +35,17 @@ class SignUpActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
 
 
+
+
         binding.doneBtn2.setOnClickListener {
 //            if (email == "" || password == "" || name == "") {
 //                Toast.makeText(this, "Please fill the details", Toast.LENGTH_SHORT).show()
 //            } else {
             val name = binding.etUsername.text.toString()
             val password = binding.etPassword.text.toString()
+            sessionManager.saveUserName(name)
+            Log.d("signup",name)
+            Log.d("signup",sessionManager.toString())
             val email = binding.etEmail.text.toString()
                 signUp(email, password, name)
 //            }
@@ -52,7 +57,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUp(email: String,password: String,name: String){
         try {
-            apiClient.getretrofitService()
+            apiClient.getretrofitService(this)
                 .signUp(name, email, password)
                 .enqueue(object : Callback<SignUpResponse> {
                     override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {

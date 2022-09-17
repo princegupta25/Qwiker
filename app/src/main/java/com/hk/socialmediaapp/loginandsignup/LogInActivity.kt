@@ -20,8 +20,8 @@ import java.lang.Exception
 class LogInActivity : AppCompatActivity() {
     lateinit var  binding: ActivityLogInBinding
 
-    private var retrofit: Retrofit? = null
-    private var retrofitInterface: RetrofitInterface? = null
+//    private var retrofit: Retrofit? = null
+//    private var retrofitInterface: RetrofitInterface? = null
     private lateinit var sessionManager: SessionManager
     private lateinit var apiClient: ApiClient
     private lateinit var userId: String
@@ -31,9 +31,12 @@ class LogInActivity : AppCompatActivity() {
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         apiClient = ApiClient()
         sessionManager = SessionManager(this)
+
+        if(sessionManager.fetchAuthToken() != null){
+            startActivity(Intent(this,MainActivity::class.java))
+        }
 
         binding.doneBtn.setOnClickListener {
 //        if(email == "" || password == ""){
@@ -55,7 +58,7 @@ class LogInActivity : AppCompatActivity() {
         try {
             Log.d("hii",apiClient.toString())
 
-            apiClient.getretrofitService()
+            apiClient.getretrofitService(this)
                 .login(email,password)
                 .enqueue(object : Callback<LoginResponse> {
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {

@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient{
     private lateinit var retrofitInterface: RetrofitInterface
-    val BASE_URL = "https://social11.herokuapp.com/api/user/"
+    val BASE_URL = "https://social11.herokuapp.com/api/"
 
     fun getretrofitService(): RetrofitInterface{
 

@@ -17,11 +17,11 @@ import retrofit2.http.*
 interface RetrofitInterface {
 
     @FormUrlEncoded
-    @POST("register")
+    @POST("auth/register")
     fun signUp(@Field("name") name: String, @Field("email") email:String, @Field("password") password: String): Call<SignUpResponse>
 
     @FormUrlEncoded
-    @POST("login")
+    @POST("auth/login")
     fun login(@Field("email") email: String, @Field("password") password: String): Call<LoginResponse>
 
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/bottomSheetProfile">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="40dp"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="125dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="#A8A8A8"/>
+
+
+        <TextView
+            android:id="@+id/tvEditProfile"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_edit"
+            android:textColor="@color/black"
+            android:paddingStart="10dp"
+            android:text="Edit Profile"/>
+
+        <TextView
+            android:id="@+id/tvEditPassword"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_baseline_lock_24"
+            android:textColor="@color/black"
+            android:paddingStart="10dp"
+            android:text="Edit Password"/>
+
+
+
+        <TextView
+            android:id="@+id/tvBookmarkShow"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_bookmark_24"
+            android:textColor="@color/black"
+            android:paddingStart="10dp"
+            android:text="Bookmark"/>
+
+
+
+
+        <TextView
+            android:id="@+id/SignOut"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_baseline_logout_24"
+            android:textColor="@color/black"
+            android:paddingStart="10dp"
+            android:text="Sign Out"/>
+
+
+
+
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

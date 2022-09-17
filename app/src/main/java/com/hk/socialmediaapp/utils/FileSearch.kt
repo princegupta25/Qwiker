@@ -1,4 +1,4 @@
-package com.example.vasukamapp.utils
+package com.hk.socialmediaapp.utils
 
 import android.content.Context
 import android.database.Cursor

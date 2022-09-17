@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hk.UI.CreateFragment
+import com.hk.UI.EditProfile
 import com.hk.UI.FeedFragment
 import com.hk.UI.ProfileFragment
 import com.hk.socialmediaapp.databinding.ActivityMainBinding
@@ -76,6 +79,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
+
+
 
 
     fun replaceFragment(fragment: Fragment){

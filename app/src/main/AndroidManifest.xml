@@ -24,13 +24,16 @@
             android:name=".post.ImagePostReviewActivity"
             android:exported="false" />
         <activity
+            android:name="com.hk.UI.EditProfile"
+            android:exported="false" />
+        <activity
             android:name=".loginandsignup.SignUpActivity"
-            android:exported="false"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:exported="false" />
         <activity
             android:name=".loginandsignup.LogInActivity"
-            android:exported="false"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:exported="false" />
         <activity
             android:name=".post.CreateImagePost"
             android:exported="false" />
@@ -50,6 +53,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <activity-->
+<!--            android:name=".loginandsignup.LoginSignupActivity"-->
+<!--            android:exported="true" />-->
     </application>
 
 </manifest>

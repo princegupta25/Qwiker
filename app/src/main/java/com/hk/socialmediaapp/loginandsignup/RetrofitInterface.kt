@@ -2,6 +2,7 @@ package com.hk.socialmediaapp.loginandsignup
 
 
 
+import com.hk.socialmediaapp.profile.UserResponse
 import com.hk.socialmediaapp.responses.LoginRequest
 import com.hk.socialmediaapp.responses.LoginResponse
 import com.hk.socialmediaapp.responses.SignUpRequest
@@ -23,6 +24,13 @@ interface RetrofitInterface {
     @FormUrlEncoded
     @POST("auth/login")
     fun login(@Field("email") email: String, @Field("password") password: String): Call<LoginResponse>
+
+    @GET("user/myProfile")
+    fun getUser():Call<UserResponse>
+
+    @FormUrlEncoded
+    @POST("user/myProfile")
+    fun updateUser(@Field("token") token: String,@Field("username") username: String,@Field("about") about: String,@Field("imageUrl") imageUrl: String):Call<UserResponse>
 
 }
 

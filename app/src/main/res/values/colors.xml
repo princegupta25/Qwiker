@@ -1,12 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
+    <color name="colorPrimary">#7F25ED</color>
+    <color name="colorPrimaryDark">#1B6AEC</color>
+    <color name="colorAccent">#0FE3E3</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="gray">#EBEBEB</color>
+    <color name="mainText">#FF000000</color>
+    <color name="backGround">#FFFFFF</color>
+
+    <color name="visualizer">#656565</color>
+    <color name="darkGreen">#3A9679</color>
+    <color name="LigthGrey">#D3D3D3</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="blue">#2B5CAF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="darkYellow">#FBA523</color>
+    <color name="lightYellow">#EEF600</color>
+    <color name="grey">#818181</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="darkOrange">#F0FB4902</color>
+    <color name="themeDarkRed">#FF1D38</color>
+    <color name="themeLightRed">#F2EC4458</color>
+    <color name="grey_tab">#686868</color>
+    <color name="indigo">#9594FD</color>
+    <color name="indigo2">#D49DFF</color>
+    <color name="yellow">#FFE665</color>
+    <color name="lime">#9DFF84</color>
+    <color name="brown">#FFA6F1</color>
+    <color name="blue">#0C2CDD</color>
+    <color name="lightOrange">#FF8383</color>
+    <color name="textBg">#FFFCF6</color>
+
+    <color name="green">#037007</color>
+    <color name="orange">#FF5722</color>
+    <color name="blue_dark">#03136E</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+
+    <color name="graphBlue">#10487B</color>
+    <color name="pastel_green_light">#A8EA9D</color>
+    <color name="old_wine">#8E0B1B</color>
+    <color name="dark_blue">#253B80</color>
+    <color name="bright_red">#FF4057</color>
+    <color name="white_smoke">#F1F1F1</color>
+    <color name="cyan_blue">#1F62CF</color>
+
+    <color name="silver_chalice">#ACACAC</color>
+    <color name="default_waveform">#178b51</color>
+    <color name="default_waveformFill">#80FFC0</color>
+    <color name="default_playback_indicator">#ffff66</color>
+    <color name="default_timecode">#ddffffdd</color>
+    <color name="default_background">#000000</color>
+    <color name = "myColor1">#FF0000</color>
+    <color name = "myColor2">#0099FF</color>
+    <color name = "myColor3">#00FF5D</color>
+    <color name = "myColor4">#FFEB3B</color>
+    <color name = "myColor5">#341A63</color>
+    <color name = "myColor6">#FF5722</color>
+    <color name="pink">#fe485a</color>
+    <color name="lightPink">#ef818c</color>
+    <color name="red">#FE444C</color>
+    <color name="mic_off">#848484</color>
 </resources>

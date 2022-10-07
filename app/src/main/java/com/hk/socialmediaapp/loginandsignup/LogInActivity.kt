@@ -39,13 +39,13 @@ class LogInActivity : AppCompatActivity() {
         }
 
         binding.doneBtn.setOnClickListener {
-//        if(email == "" || password == ""){
-//            Toast.makeText(this,"Please fill the details",Toast.LENGTH_SHORT).show()
-//        }else{
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
+        if(email == "" || password == ""){
+            Toast.makeText(this,"Please fill the details",Toast.LENGTH_SHORT).show()
+        }else{
             login(email,password)
-//            }
+            }
         }
 
         binding.tvRegister.setOnClickListener{
@@ -76,6 +76,7 @@ class LogInActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             if (loginResponse != null) {
                                 sessionManager.saveAuthToken(loginResponse.token)
+                                Log.d("mainLog",loginResponse.toString())
                                 Toast.makeText(applicationContext, loginResponse.token, Toast.LENGTH_SHORT).show()
                             }
                             Toast.makeText(applicationContext, "Logged in successfully", Toast.LENGTH_SHORT).show()

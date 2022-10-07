@@ -20,21 +20,25 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
-import com.example.vasukamapp.utils.FilePaths
-import com.example.vasukamapp.utils.FileSearch
-import com.example.vasukamapp.utils.FileSearch.getDirectoryPaths
 import com.hk.UI.FeedFragment
 import com.hk.socialmediaapp.MainActivity
 import com.hk.socialmediaapp.R
+import com.hk.socialmediaapp.api.ApiClient
+import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.databinding.ActivityCreateImagePostBinding
 import com.hk.socialmediaapp.post.Adapter.Adapter
 import com.hk.socialmediaapp.utils.Constants
-import com.hk.socialmediaapp.utils.PostHelperKit
-import com.hk.socialmediaapp.utils.PostHelperKit.selected_image_uri
+import com.hk.socialmediaapp.utils.FilePaths
+import com.hk.socialmediaapp.utils.FileSearch
+import com.hk.socialmediaapp.utils.FileSearch.getDirectoryPaths
 import java.io.File
 
 class CreateImagePost : AppCompatActivity() {
+
+
 
     private lateinit var binding: ActivityCreateImagePostBinding
 
@@ -47,6 +51,7 @@ class CreateImagePost : AppCompatActivity() {
     private val mAppend = "file:/"
     private var mSelectedImage: String = ""
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateImagePostBinding.inflate(layoutInflater)
@@ -54,6 +59,8 @@ class CreateImagePost : AppCompatActivity() {
 
         binding.progressBar.isVisible
         directories = arrayListOf()
+
+
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -114,7 +121,7 @@ class CreateImagePost : AppCompatActivity() {
             mSelectedImage = FileSearch.getRealPathFromURI(this, data?.data!!)
 
             val uri = Uri.fromFile(File(mSelectedImage))
-            Toast.makeText(this@CreateImagePost,uri.toString(),Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@CreateImagePost,uri.toString(),Toast.LENGTH_SHORT).show()
 
         } else if (resultCode == Activity.RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
 
@@ -123,7 +130,7 @@ class CreateImagePost : AppCompatActivity() {
                 galleryImageView.setImageBitmap(data?.extras?.get("data") as Bitmap)
             }
 
-            selected_image_uri = data?.data
+//            selected_image_uri = data?.data
 //            mSelectedImage = FileSearch.getRealPathFromURI(this, data?.data!!)
 
         }else{
@@ -196,17 +203,25 @@ class CreateImagePost : AppCompatActivity() {
             }
         }
 
-        binding.galaryImageRecView.setHasFixedSize(true)
-        val adapter = Adapter(this, imgURLs) {
-            //setImage(it, binding.galleryImageView, mAppend)
+//        binding.galaryImageRecView.setHasFixedSize(true)
+//        val adapter = Adapter(this, imgURLs) {
+//            //setImage(it, binding.galleryImageView, mAppend)
+//            Glide.with(this).load(it).into(binding.galleryImageView)
+//            mSelectedImage = it
+////            selected_image_uri = Uri.fromFile(File(mSelectedImage))
+//            val uri = Uri.fromFile(File(mSelectedImage))
+////            Toast.makeText(this@CreateImagePost,uri.toString(),Toast.LENGTH_SHORT).show()
+//
+//        }
+//        binding.galaryImageRecView.layoutManager = GridLayoutManager(this, 3)
+//        binding.galaryImageRecView.adapter = adapter
+
+        val adapter = Adapter(this,imgURLs){
             Glide.with(this).load(it).into(binding.galleryImageView)
             mSelectedImage = it
-//            selected_image_uri = Uri.fromFile(File(mSelectedImage))
             val uri = Uri.fromFile(File(mSelectedImage))
-            Toast.makeText(this@CreateImagePost,uri.toString(),Toast.LENGTH_SHORT).show()
-
         }
-        binding.galaryImageRecView.layoutManager = GridLayoutManager(this, 3)
+        binding.galaryImageRecView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         binding.galaryImageRecView.adapter = adapter
 
         if (imgURLs.isNotEmpty()) {
@@ -216,7 +231,7 @@ class CreateImagePost : AppCompatActivity() {
                 mSelectedImage = imgURLs[0]
 //                selected_image_uri = Uri.fromFile(File(mSelectedImage))
                 val uri = Uri.fromFile(File(mSelectedImage))
-                Toast.makeText(this@CreateImagePost,uri.toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@CreateImagePost,uri.toString(),Toast.LENGTH_SHORT).show()
 
             } catch (e: ArrayIndexOutOfBoundsException) {
             }
@@ -225,8 +240,6 @@ class CreateImagePost : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        PostHelperKit.clearPostData()
-        PostHelperKit.clearSelectedImage()
         startActivity(Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         })

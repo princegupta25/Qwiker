@@ -6,6 +6,7 @@ import com.hk.socialmediaapp.loginandsignup.RetrofitInterface
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.HTTP
 
 class ApiClient{
     private lateinit var retrofitInterface: RetrofitInterface

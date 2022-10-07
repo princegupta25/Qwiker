@@ -4,30 +4,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E1DADA"
     android:id="@+id/addBottomSheetId">
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/uploadImage"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:background="#2B5CAF"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="image" />-->
+
+<!--        <Button-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:background="#2B5CAF"-->
+<!--            android:id="@+id/uploadText"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Text" />-->
+
+<!--    </LinearLayout>-->
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="125dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="#A8A8A8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginStart="4dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="140dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/view"
+        tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/uploadImage"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:text="image" />
 
-        <Button
+        <androidx.cardview.widget.CardView
             android:id="@+id/uploadText"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:text="Text" />
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#4782E6"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+            <ImageView
+                android:id="@+id/textPostIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:src="@drawable/ic_pencil" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/uploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="25dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="#4782E6"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+            <ImageView
+                android:id="@+id/imagePostIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:src="@drawable/ic_image" />
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 

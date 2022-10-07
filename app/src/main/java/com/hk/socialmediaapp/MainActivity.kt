@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -66,13 +67,13 @@ class MainActivity : AppCompatActivity() {
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
 
-        bottomSheetDialog.findViewById<Button>(R.id.uploadText)!!.setOnClickListener {
+        bottomSheetDialog.findViewById<CardView>(R.id.uploadText)!!.setOnClickListener {
             startActivity(Intent(this,CreateTextPost::class.java)
                 .putExtra("Post_Type","TextPost"))
 
         }
 
-        bottomSheetDialog.findViewById<Button>(R.id.uploadImage)!!.setOnClickListener {
+        bottomSheetDialog.findViewById<CardView>(R.id.uploadImage)!!.setOnClickListener {
             startActivity(Intent(this,CreateImagePost::class.java)
                 .putExtra("Post_Type","ImagePost"))
 

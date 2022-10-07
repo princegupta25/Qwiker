@@ -14,14 +14,6 @@ import androidx.compose.runtime.snapshots.SnapshotApplyResult.Success.check
 import com.bumptech.glide.Glide
 import com.hk.socialmediaapp.R
 
-//import com.makeramen.roundedimageview.RoundedImageView
-//import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache
-//import com.nostra13.universalimageloader.core.DisplayImageOptions
-//import com.nostra13.universalimageloader.core.ImageLoader
-//import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
-//import com.nostra13.universalimageloader.core.assist.FailReason
-//import com.nostra13.universalimageloader.core.assist.ImageScaleType
-//import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 
 
 class Adapter(

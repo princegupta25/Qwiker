@@ -7,7 +7,7 @@ data class UserResponse(
 //    val date: String,
 //    val email: String,
     var imageUrl: String?,
-//    val name: String,
+    val name: String,
     var username: String?
 )
 

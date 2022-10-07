@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import com.hk.socialmediaapp.api.ApiClient
 import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.databinding.ActivityLogInBinding
@@ -38,21 +39,22 @@ class SignUpActivity : AppCompatActivity() {
 
 
         binding.doneBtn2.setOnClickListener {
-//            if (email == "" || password == "" || name == "") {
-//                Toast.makeText(this, "Please fill the details", Toast.LENGTH_SHORT).show()
-//            } else {
             val name = binding.etUsername.text.toString()
             val password = binding.etPassword.text.toString()
-            sessionManager.saveUserName(name)
-            Log.d("signup",name)
-            Log.d("signup",sessionManager.toString())
             val email = binding.etEmail.text.toString()
+            if (email == "" || password == "" || name == "") {
+                Toast.makeText(this, "Please fill the details", Toast.LENGTH_SHORT).show()
+            } else if(password.length<6) {
+                Toast.makeText(this,"Length of password must be greater than 6",Toast.LENGTH_SHORT).show()
+            }else{
+                sessionManager.saveUserName(name)
                 signUp(email, password, name)
-//            }
+            }
         }
         binding.tvSignIn.setOnClickListener {
             startActivity(Intent(this,LogInActivity::class.java))
         }
+
     }
 
     private fun signUp(email: String,password: String,name: String){
@@ -70,7 +72,7 @@ class SignUpActivity : AppCompatActivity() {
                         response: Response<SignUpResponse>
                     ) {
                         val signUpResponse: SignUpResponse? = response.body()
-                        Log.d("hii3",signUpResponse.toString())
+//                        Log.d("hii3",signUpResponse.toString())
                         if (response.isSuccessful) {
                             if (signUpResponse != null) {
                                 userId = signUpResponse.user

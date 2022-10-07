@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
             android:textSize="16sp"
+            android:paddingTop="3dp"
             android:drawableStart="@drawable/ic_edit"
             android:textColor="@color/black"
             android:paddingStart="10dp"
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:drawablePadding="10dp"
+            android:paddingTop="3dp"
             android:drawableStart="@drawable/ic_baseline_lock_24"
             android:textColor="@color/black"
             android:paddingStart="10dp"
@@ -50,6 +52,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:drawablePadding="10dp"
+            android:paddingTop="3dp"
             android:drawableStart="@drawable/ic_bookmark_24"
             android:textColor="@color/black"
             android:paddingStart="10dp"
@@ -67,6 +70,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/ic_baseline_logout_24"
             android:textColor="@color/black"
+            android:paddingBottom="10dp"
             android:paddingStart="10dp"
             android:text="Sign Out"/>
 

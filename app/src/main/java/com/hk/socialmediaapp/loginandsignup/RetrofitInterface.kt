@@ -2,7 +2,10 @@ package com.hk.socialmediaapp.loginandsignup
 
 
 
+import com.hk.socialmediaapp.profile.GetPostResponse
+import com.hk.socialmediaapp.profile.PostResponse
 import com.hk.socialmediaapp.profile.UserResponse
+import com.hk.socialmediaapp.profile.UserUpdateResponse
 import com.hk.socialmediaapp.responses.LoginRequest
 import com.hk.socialmediaapp.responses.LoginResponse
 import com.hk.socialmediaapp.responses.SignUpRequest
@@ -30,7 +33,27 @@ interface RetrofitInterface {
 
     @FormUrlEncoded
     @POST("user/myProfile")
-    fun updateUser(@Field("token") token: String,@Field("username") username: String,@Field("about") about: String,@Field("imageUrl") imageUrl: String):Call<UserResponse>
+    fun  updateUser(@Field("username") username: String,@Field("about") about: String,@Field("imageUrl") imageUrl: String):Call<UserUpdateResponse>
+
+    @FormUrlEncoded
+    @POST("posts/createpost")
+    fun createPost(@Field("photo") photo: String?,
+                   @Field("title") title: String?,@Field("body") body: String,
+                   @Field("postType") postType: String,@Field("username") username: String): Call<PostResponse>
+
+    @GET("posts/showAllPosts")
+    fun getAllPosts(): Call<GetPostResponse>
+
+    @GET("posts/showMyPosts")
+    fun getMyPosts(): Call<GetPostResponse>
 
 }
 
+//    @FormUrlEncoded
+//    @POST("user/myProfile")
+//    fun updateUser(@Field("token") token: String,@Field("username") username: String,@Field("about") about: String,@Field("imageUrl") imageUrl: String):Call<UserResponse>
+
+//    @FormUrlEncoded
+//    @POST("user/myProfile")
+//    fun  updateUser(@Field("username") username: String,@Field("about") about: String,@Field("imageUrl") imageUrl: String):Call<UserResponse>
+//    //change type of userResponse to userUpdateResponse

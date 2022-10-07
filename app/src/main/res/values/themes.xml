@@ -21,8 +21,8 @@
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/white</item>
-        <item name="iconTint">@color/white</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="drawableTint">@color/white</item>
+        <item name="iconTint">@color/blue</item>
+        <item name="colorAccent">@color/blue</item>
+        <item name="drawableTint">@color/blue</item>
     </style>
 </resources>

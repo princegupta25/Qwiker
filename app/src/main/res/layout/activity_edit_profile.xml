@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:weightSum="5"
+            android:layout_marginTop="5dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/top_bar"
@@ -25,7 +26,8 @@
                 android:id="@+id/back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
+                android:visibility="invisible"
+                android:layout_weight="2"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_back" />
 
@@ -34,8 +36,9 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:text=" Edit Profile"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:textAlignment="center"
+                android:layout_marginEnd="35dp"
                 android:textStyle="bold" />
 
 
@@ -70,12 +73,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/card"
-            android:maxLines="1"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="114dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginStart="60dp"
+            android:gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="100dp"
+            android:maxLines="1"
             android:text="Change Profile Photo"
             android:textColor="#2B5CAF"
             android:textSize="16sp" />
@@ -114,18 +118,23 @@
                 android:hint="Describe Yourself"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/doneBtn"
-                android:layout_width="match_parent"
-                android:layout_height="49dp"
-                android:layout_marginTop="200dp"
-                android:background="@drawable/custom_button"
-                android:text="Update Profile"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+
 
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/doneBtn"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+
+            android:background="@drawable/custom_button"
+            android:text="Update Profile"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
 
     </RelativeLayout>
 

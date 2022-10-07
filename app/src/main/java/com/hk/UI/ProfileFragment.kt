@@ -14,20 +14,38 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.hk.socialmediaapp.Feed.Adapters.FeedPostAdapter
+import com.hk.socialmediaapp.QwikerApplication
 import com.hk.socialmediaapp.R
 import com.hk.socialmediaapp.api.ApiClient
 import com.hk.socialmediaapp.api.SessionManager
+import com.hk.socialmediaapp.data.PostItem
 import com.hk.socialmediaapp.databinding.DialogSettingsBinding
 import com.hk.socialmediaapp.databinding.FragmentProfileBinding
 import com.hk.socialmediaapp.loginandsignup.LogInActivity
 import com.hk.socialmediaapp.loginandsignup.RetrofitInterface
+import com.hk.socialmediaapp.profile.GetPostResponseItem
+import com.hk.socialmediaapp.profile.Post
 import com.hk.socialmediaapp.profile.UserResponse
 import com.hk.socialmediaapp.utils.FileSearch
+import com.hk.socialmediaapp.viewmodel.InventoryViewModelFactory
+import com.hk.socialmediaapp.viewmodel.PostViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,6 +55,15 @@ import java.lang.Exception
 
 
 class ProfileFragment : Fragment() {
+
+//   2
+    private val viewModel: PostViewModel by activityViewModels(){
+        InventoryViewModelFactory(
+            (activity?.application as QwikerApplication).database
+                .postItemDao()
+        )
+    }
+    private lateinit var savedItems: List<Post>
 
     lateinit var  binding :FragmentProfileBinding
 
@@ -56,7 +83,7 @@ class ProfileFragment : Fragment() {
     private lateinit var img_url: String
     private lateinit var userName: String
     private lateinit var userBio: String
-
+    private lateinit var postList: MutableList<GetPostResponseItem>
 
 
 
@@ -87,16 +114,26 @@ class ProfileFragment : Fragment() {
         sessionManager = SessionManager(requireContext())
         binding.userName.text = sessionManager.fetchUserName()
 
+        postList = mutableListOf()
+
         sheetBinding = DialogSettingsBinding.bind(
             LayoutInflater.from(context).inflate(R.layout.dialog_settings,null)
         )
+
+        Log.d("signouut",sessionManager.fetchUserName().toString())
+        Log.d("signouut",sessionManager.fetchAuthToken().toString())
 
         val options: RequestOptions = RequestOptions()
             .centerCrop()
             .placeholder(R.mipmap.ic_launcher_round)
             .error(R.mipmap.ic_launcher_round)
 
-        Glide.with(this).load(url).apply(options).into(binding.profileImage);
+//        if(sessionManager.fetchProfileImgUrl() == null) {
+            Glide.with(requireContext()).load(url).apply(options).into(binding.profileImage);
+//        }else{
+//            Log.d("hii2",sessionManager.fetchProfileImgUrl().toString())
+//            Glide.with(requireContext()).load(sessionManager.fetchProfileImgUrl().toString()).apply(options).into(binding.profileImage);
+//        }
 
 
         bottomSheetDialog = BottomSheetDialog(
@@ -112,7 +149,43 @@ class ProfileFragment : Fragment() {
 //        }
 //        updateBio()
 
-        getUserDetails()
+        context?.let { getUserDetails(it) }
+
+
+        lifecycle.coroutineScope.launch{
+            viewModel.getAllItems().collect(){
+                for (postItem in it){
+//                    val post: Post = Post(postItem.postId,postItem.desc,postItem.imgUrl,
+//                                           postItem.postType,postItem.timeStamp,postItem.userName,postItem.authToken)
+//                    postList.add(post)
+                    val post :GetPostResponseItem = GetPostResponseItem(postItem.postId,postItem.desc,postItem.imgUrl,
+                    postItem.postType,null,null,postItem.userName)
+                    postList.add(post)
+                }
+                val adapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,requireContext(),"Profile"){ post->
+                    showConfirmationDialog(post)
+                    postList.remove(post)
+
+                }
+                binding.savedPostRecView.adapter =adapter
+                binding.savedPostRecView.layoutManager = LinearLayoutManager(context)
+
+
+//                binding.feedBtn.setOnClickListener {
+//                    fragmentManager.beginTransaction()
+//                        .replace(R.id.flLayout,UserPostFragment())
+//                        .commit()
+//                }
+//
+//                binding.savedBtn.setOnClickListener {
+//                    fragmentManager.beginTransaction()
+//                        .replace(R.id.flLayout,BookmarkFragment())
+//                        .commit()
+//                }
+            }
+        }
+
+
 
     }
 //    override fun OnBackPressedCallback(){
@@ -132,12 +205,13 @@ class ProfileFragment : Fragment() {
 
         bottomSheetDialog.findViewById<TextView>(R.id.tvEditProfile)!!.setOnClickListener {
             //edit name
-            Toast.makeText(context, "edit profile", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "edit profile", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, EditProfile::class.java)
-                .putExtra("USER_NAME",sessionManager.fetchUserName().toString())
-                .putExtra("IMG_URL","https://cdn.pixabay.com/photo/2018/04/26/16/31/marine-3352341_960_720.jpg")
-                .putExtra("BIO","hi i am harshit")
+                .putExtra("USER_NAME",userName)
+                .putExtra("IMG_URL",img_url)
+                .putExtra("BIO",userBio)
             startActivity(intent)
+            bottomSheetDialog.dismiss()
         }
         bottomSheetDialog.findViewById<TextView>(R.id.tvEditPassword)!!.setOnClickListener {
             //edit password
@@ -145,12 +219,16 @@ class ProfileFragment : Fragment() {
 
         bottomSheetDialog.findViewById<TextView>(R.id.SignOut)!!.setOnClickListener {
             //edit signout
-            Toast.makeText(context, sessionManager.fetchAuthToken(),Toast.LENGTH_SHORT).show()
             sessionManager.removeAuthToken()
-            Toast.makeText(context, sessionManager.fetchUserName(), Toast.LENGTH_SHORT).show()
             sessionManager.removeUsername()
-            startActivity(Intent(context,LogInActivity::class.java))
+            Log.d("signouut",sessionManager.fetchUserName().toString())
+            Log.d("signouut",sessionManager.fetchAuthToken().toString())
+            val intent= Intent(context,LogInActivity::class.java)
+            activity?.finishAffinity()
+            startActivity(intent)
+
         }
+
 
 
     }
@@ -190,7 +268,7 @@ class ProfileFragment : Fragment() {
 //        startActivityForResult(intent,GALLERY_REQUEST_CODE)
 ////        updateProfilePic()
 //    }
-fun getUserDetails(){
+fun getUserDetails(context: Context){
 
     val token = sessionManager.fetchAuthToken().toString()
     try {
@@ -211,18 +289,22 @@ fun getUserDetails(){
                     if (response.isSuccessful) {
                         if (userResponse != null) {
 
+//                            binding.userName.text = userResponse.name
                             binding.userName.text = userResponse.username.toString()
                             binding.userDesc.text = userResponse.about.toString()
+                            userName = userResponse.username.toString()
+                            userBio= userResponse.about.toString()
+                            img_url = userResponse.imageUrl.toString()
                             val options: RequestOptions = RequestOptions()
                                 .centerCrop()
                                 .placeholder(R.mipmap.ic_launcher_round)
                                 .error(R.mipmap.ic_launcher_round)
-                            Glide.with(requireContext()).load(userResponse.imageUrl).apply(options).into(binding.profileImage)
+                            Glide.with(context).load(userResponse.imageUrl).apply(options).error(R.drawable.person_user).into(binding.profileImage)
 
 
-                            Toast.makeText(context,userResponse.username,Toast.LENGTH_SHORT).show()
-                            Toast.makeText(context,userResponse.about,Toast.LENGTH_SHORT).show()
-                            Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(context,userResponse.username,Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(context,userResponse.about,Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
                         }
                         Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show()
 //                                startActivity(Intent(this@EditProfile, ProfileFragment::class.java))
@@ -311,5 +393,24 @@ fun getUserDetails(){
 //    }
 //
 //
+
+//   2
+   private fun showConfirmationDialog(post: GetPostResponseItem) {
+    MaterialAlertDialogBuilder(requireContext())
+        .setTitle(getString(android.R.string.dialog_alert_title))
+        .setMessage(getString(R.string.delete_question))
+        .setCancelable(false)
+        .setNegativeButton(getString(R.string.no)) { _, _ -> }
+        .setPositiveButton(getString(R.string.yes)) { _, _ ->
+            deleteItem(post)
+        }.show()
+}
+    private fun deleteItem(post: GetPostResponseItem) {
+        //here we should make postId as primary key and for that we have to modify database ans version schema
+        val postItem = PostItem(postId = post._id, desc = post.body,
+            imgUrl = post.photo, timeStamp = post.postedBy!!.date,
+            postType = post.postType, userName = post.postedBy.username, authToken = "will look later")
+            viewModel.deletePostItem(postItem)
+    }
 
 }

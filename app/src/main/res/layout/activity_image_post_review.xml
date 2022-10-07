@@ -23,6 +23,7 @@
                 android:id="@+id/backBtn"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
+                android:visibility="invisible"
                 android:src="@drawable/back_arrow_figma" />
 
             <View
@@ -102,13 +103,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
 
                     <EditText
-                        android:id="@+id/titlePostEt"
+                        android:id="@+id/bodyPostEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:background="@color/white"
                         android:fontFamily="@font/poppins"
-                        android:hint="Write a title"
+                        android:hint="Caption !!"
                         android:inputType="textMultiLine"
                         android:maxLines="3"
                         android:paddingStart="10dp"

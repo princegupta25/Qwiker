@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/ProfileFragment"
@@ -22,29 +23,32 @@
         <LinearLayout
             android:id="@+id/LL1"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:weightSum="5"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/top_bar"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="5">
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:paddingStart="75dp"
+                android:layout_marginStart="40dp"
+                android:layout_weight="3.5"
+                android:gravity="center_vertical"
                 android:text="Profile"
-                android:layout_weight="4"
+                android:fontFamily="@font/poppins"
                 android:textAlignment="center"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
 
             <ImageView
                 android:id="@+id/settings"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
+                android:layout_gravity="center|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1.5"
                 android:src="@drawable/ic_settings" />
 
 
@@ -70,14 +74,14 @@
 
         </androidx.cardview.widget.CardView>
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_below="@+id/card"
-            android:layout_gravity="end"
-            android:layout_marginStart="230dp"
-            android:layout_marginTop="-20dp"
-            android:src="@drawable/ic_edit" />
+        <!--        <ImageView-->
+        <!--            android:layout_width="25dp"-->
+        <!--            android:layout_height="25dp"-->
+        <!--            android:layout_below="@+id/card"-->
+        <!--            android:layout_gravity="end"-->
+        <!--            android:layout_marginStart="230dp"-->
+        <!--            android:layout_marginTop="-20dp"-->
+        <!--            android:src="@drawable/ic_edit" />-->
 
         <TextView
             android:id="@+id/user_name"
@@ -97,28 +101,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:orientation="horizontal">
 
 
             <TextView
                 android:id="@+id/user_desc"
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_below="@+id/user_name"
                 android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10sp"
                 android:maxLines="3"
-                android:text="Shah Rukh Khan is an Indian actor, producer and television personality. Referred to in the media as, he has appeared in over 80  films"
+                android:text="Write about your self..."
                 android:textAlignment="center"
                 android:textSize="14sp" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/bioPen"-->
-<!--                android:layout_width="25dp"-->
-<!--                android:layout_height="25dp"-->
-<!--                android:layout_gravity="bottom"-->
-<!--                android:src="@drawable/ic_edit" />-->
+            <!--            <ImageView-->
+            <!--                android:id="@+id/bioPen"-->
+            <!--                android:layout_width="25dp"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_gravity="bottom"-->
+            <!--                android:src="@drawable/ic_edit" />-->
 
 
         </LinearLayout>
@@ -126,20 +133,76 @@
 
     </RelativeLayout>
 
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout10"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_above="@id/relativeLayout3"-->
+<!--        android:layout_alignBottom="@+id/relativeLayout1"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum="2">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/feedBtn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:backgroundTint="@color/white"-->
+<!--            android:hint="Feed"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:textStyle="bold" />-->
+
+
+<!--        <Button-->
+<!--            android:id="@+id/savedBtn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:backgroundTint="@color/white"-->
+<!--            android:hint="Saved"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:textStyle="bold" />-->
+
+
+<!--    </LinearLayout>-->
+
+
     <RelativeLayout
-        android:layout_below="@id/relativeLayout1"
+        android:id="@+id/relativeLayout3"
         android:layout_width="match_parent"
-        android:background="#E1DADA"
-        android:layout_marginTop="10dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/relativeLayout1"
+        android:background="#E1DADA">
+
+        <!--1-->
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:id="@+id/userpost"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:padding="10dp" />-->
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userpost"
+            android:id="@+id/savedPostRecView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp" />
 
 
+<!--        <FrameLayout-->
+<!--            android:id="@+id/flLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="0.0"-->
+<!--            tools:layout_editor_absoluteX="108dp" />-->
 
 
     </RelativeLayout>

@@ -49,9 +49,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="200dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
+        android:weightSum="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view"
@@ -60,8 +61,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/uploadText"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
@@ -69,38 +70,93 @@
             android:layout_weight="1"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="#4782E6"
-            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
-            <ImageView
-                android:id="@+id/textPostIcon"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                android:src="@drawable/ic_pencil" />
+                android:gravity="center"
+                android:background="@drawable/stroke"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/textPostIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                  android:layout_gravity="center"
+                    android:src="@drawable/textpost" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+<!--            <ImageView-->
+<!--                android:id="@+id/textPostIcon"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:padding="30dp"-->
+<!--                android:src="@drawable/textpost" />-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Text"-->
+<!--                -->
+<!--                android:textSize="18sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                />-->
+
+
+
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/uploadImage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="25dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="#4782E6"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
-            <ImageView
-                android:id="@+id/imagePostIcon"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                android:src="@drawable/ic_image" />
+                android:gravity="center"
+                android:background="@drawable/stroke"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imagePostIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/imagepost" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Photo"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+
+            <!--            <ImageView-->
+<!--                android:id="@+id/imagePostIcon"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:padding="30dp"-->
+<!--                android:src="@drawable/imagepost" />-->
 
         </androidx.cardview.widget.CardView>
 

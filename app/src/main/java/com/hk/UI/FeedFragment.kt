@@ -7,29 +7,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.DocumentSnapshot
 import com.hk.socialmediaapp.Feed.Adapters.FeedPostAdapter
 import com.hk.socialmediaapp.QwikerApplication
-import com.hk.socialmediaapp.R
 import com.hk.socialmediaapp.api.ApiClient
 import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.data.PostItem
 import com.hk.socialmediaapp.databinding.FragmentFeedBinding
+import com.hk.socialmediaapp.likeresponse.LikeResponse
 import com.hk.socialmediaapp.profile.GetPostResponse
 import com.hk.socialmediaapp.profile.GetPostResponseItem
 import com.hk.socialmediaapp.viewmodel.InventoryViewModelFactory
 import com.hk.socialmediaapp.viewmodel.PostViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.properties.Delegates
 
 
 class FeedFragment : Fragment() {
@@ -47,6 +42,9 @@ class FeedFragment : Fragment() {
     private lateinit var apiClient: ApiClient
     private lateinit var sessionManager: SessionManager
     private lateinit var listPosts: ArrayList<GetPostResponseItem>
+
+//    private lateinit var postId:String
+//    private var isLiked=false
 
 //    1
 //    var totalPosts=18
@@ -73,10 +71,10 @@ class FeedFragment : Fragment() {
         Log.d("harsh",apiClient.toString() + sessionManager.toString())
         listPosts = arrayListOf()
 
-        getPostItems()
+        getPostItems(requireContext())
 
 
-//        Log.d("harsh",listPosts.toString())
+        Log.d("harsh",listPosts.toString())
 
 
 
@@ -114,7 +112,7 @@ class FeedFragment : Fragment() {
 //        }
     }
 
-    private fun getPostItems(){
+    private fun getPostItems(context: Context){
         Log.d("harsh","start")
         try {
             apiClient.getretrofitService(requireContext())
@@ -132,7 +130,7 @@ class FeedFragment : Fragment() {
                                 listPosts=getPostResponse
                                 Log.d("harsh1",listPosts.toString())
                                 Toast.makeText(requireContext(),"retrieved",Toast.LENGTH_SHORT).show()
-                                setUpRecyclerView(listPosts)
+                                setUpRecyclerView(context,listPosts)
                             }else{
                                 Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
                             }
@@ -210,11 +208,21 @@ class FeedFragment : Fragment() {
 
 //2
 
-    private fun setUpRecyclerView(postList: ArrayList<GetPostResponseItem>){
-        feedAdapter = FeedPostAdapter(listPosts,requireContext(),"Feed",){
+    private fun setUpRecyclerView(context: Context,postList: ArrayList<GetPostResponseItem>){
+        feedAdapter = FeedPostAdapter(listPosts,requireContext(),"Feed", listener2 = { postId , isLiked->
+            Log.d("forlike",postId)
+            if(isLiked == true){
+                //code for liking the post
+                likePost(context,postId)
+            }else{
+                //code for unliking the post
+                unlikePost(context,postId)
+            }
+        }){
             Log.d("harsh",feedAdapter.toString())
             savePostItem(it)
         }
+
 
         binding.postRecView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -235,4 +243,59 @@ class FeedFragment : Fragment() {
        }
 
 }
+
+    private fun likePost(context: Context, postId: String){
+        try {
+            apiClient.getretrofitService(context)
+                .likePost(postId)
+                .enqueue(object : Callback<LikeResponse>{
+                    override fun onResponse(
+                        call: Call<LikeResponse>,
+                        response: Response<LikeResponse>
+                    ) {
+                        val likeResponse = response.body()
+                        if (response.isSuccessful){
+                            if (likeResponse!=null){
+                                Toast.makeText(context,"Liked",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                        Toast.makeText(context,"Network Error",Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+        }catch (e: Exception){
+            Toast.makeText(context,e.message,Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun unlikePost(context: Context, postId: String){
+        try {
+            apiClient.getretrofitService(context)
+                .unlikePost(postId)
+                .enqueue(object : Callback<LikeResponse>{
+                    override fun onResponse(
+                        call: Call<LikeResponse>,
+                        response: Response<LikeResponse>
+                    ) {
+                        val unlikeResponse = response.body()
+                        if (response.isSuccessful){
+                            if (unlikeResponse!=null){
+                                Toast.makeText(context,"Unliked",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                        Toast.makeText(context,"Network Error",Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+        }catch (e: Exception){
+            Toast.makeText(context,e.message,Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }

@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     tools:context="com.hk.UI.UserPostFragment">
 
+    <TextView
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:textSize="25sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hii"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userPostRecView"
         android:layout_width="match_parent"

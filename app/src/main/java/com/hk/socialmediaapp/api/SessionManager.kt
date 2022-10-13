@@ -10,6 +10,7 @@ class SessionManager(context: Context) {
     companion object{
         const val USER_TOKEN = "user_token"
         const val USER_NAME = "user_name"
+        const val USER_ID = "user_id"
 //        const val PROFILE_IMG = "img_profile"
     }
 
@@ -28,6 +29,24 @@ class SessionManager(context: Context) {
         editor.putString(USER_NAME,name)
         editor.apply()
     }
+
+    fun saveUserID(Id: String){
+        val editor = prefs.edit()
+        editor.putString(USER_ID,Id)
+        editor.apply()
+    }
+
+    fun fetchUserId(): String?{
+        return prefs.getString(USER_ID,null)
+    }
+
+    fun removeUserId(){
+        val editor = prefs.edit()
+        editor.putString(USER_ID,null)
+        editor.apply()
+    }
+
+
 
     fun fetchUserName(): String?{
         return prefs.getString(USER_NAME,null)

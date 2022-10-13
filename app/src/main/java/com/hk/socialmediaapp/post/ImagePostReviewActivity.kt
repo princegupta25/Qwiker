@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.view.isInvisible
 import com.hk.socialmediaapp.MainActivity
 import com.hk.socialmediaapp.api.ApiClient

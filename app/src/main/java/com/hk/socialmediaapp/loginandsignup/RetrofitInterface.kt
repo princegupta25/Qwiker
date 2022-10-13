@@ -2,6 +2,7 @@ package com.hk.socialmediaapp.loginandsignup
 
 
 
+import com.hk.socialmediaapp.likeresponse.LikeResponse
 import com.hk.socialmediaapp.profile.GetPostResponse
 import com.hk.socialmediaapp.profile.PostResponse
 import com.hk.socialmediaapp.profile.UserResponse
@@ -46,6 +47,22 @@ interface RetrofitInterface {
 
     @GET("posts/showMyPosts")
     fun getMyPosts(): Call<GetPostResponse>
+
+    @FormUrlEncoded
+    @PUT("posts/comment")
+    fun postComment(@Field("text") text: String,@Field("content") content: String,@Field("postId") postId: String) : Call<String>
+
+    @FormUrlEncoded
+    @PUT("posts/like")
+    fun likePost(@Field("postId") postId: String): Call<LikeResponse>
+
+    @FormUrlEncoded
+    @PUT("posts/unlike")
+    fun unlikePost(@Field("postId") postId: String): Call<LikeResponse>
+
+    @DELETE("posts/deletepost/{id}")
+    fun deletePost(@Path("id") postid:String): Call<LikeResponse>
+
 
 }
 

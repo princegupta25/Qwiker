@@ -76,6 +76,7 @@ class SignUpActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             if (signUpResponse != null) {
                                 userId = signUpResponse.user
+                                sessionManager.saveUserID(userId)
                             }
                             Toast.makeText(applicationContext,"SignUp successfully", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@SignUpActivity,LogInActivity::class.java))

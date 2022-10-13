@@ -125,11 +125,11 @@
 
         <Button
             android:id="@+id/doneBtn"
+            android:layout_margin="16dp"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
-
             android:background="@drawable/custom_button"
             android:text="Update Profile"
             android:textColor="@color/white"

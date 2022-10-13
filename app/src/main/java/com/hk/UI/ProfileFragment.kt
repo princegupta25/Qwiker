@@ -13,20 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.coroutineScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.hk.socialmediaapp.Feed.Adapters.FeedPostAdapter
 import com.hk.socialmediaapp.QwikerApplication
 import com.hk.socialmediaapp.R
 import com.hk.socialmediaapp.api.ApiClient
@@ -39,12 +32,10 @@ import com.hk.socialmediaapp.loginandsignup.RetrofitInterface
 import com.hk.socialmediaapp.profile.GetPostResponseItem
 import com.hk.socialmediaapp.profile.Post
 import com.hk.socialmediaapp.profile.UserResponse
+import com.hk.socialmediaapp.utils.CommentList
 import com.hk.socialmediaapp.utils.FileSearch
 import com.hk.socialmediaapp.viewmodel.InventoryViewModelFactory
 import com.hk.socialmediaapp.viewmodel.PostViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,6 +46,10 @@ import java.lang.Exception
 
 
 class ProfileFragment : Fragment() {
+
+    private val bookmarkFragment = BookmarkFragment()
+    private val userPostFragment = UserPostFragment()
+
 
 //   2
     private val viewModel: PostViewModel by activityViewModels(){
@@ -120,6 +115,18 @@ class ProfileFragment : Fragment() {
             LayoutInflater.from(context).inflate(R.layout.dialog_settings,null)
         )
 
+        replaceFragment(userPostFragment)
+        binding.feedBtn.setOnClickListener {
+            replaceFragment(userPostFragment)
+
+        }
+        binding.savedBtn.setOnClickListener {
+            replaceFragment(bookmarkFragment)
+
+        }
+
+
+
         Log.d("signouut",sessionManager.fetchUserName().toString())
         Log.d("signouut",sessionManager.fetchAuthToken().toString())
 
@@ -151,39 +158,40 @@ class ProfileFragment : Fragment() {
 
         context?.let { getUserDetails(it) }
 
+// IN THE BOOKMARK FRAGMENT
 
-        lifecycle.coroutineScope.launch{
-            viewModel.getAllItems().collect(){
-                for (postItem in it){
-//                    val post: Post = Post(postItem.postId,postItem.desc,postItem.imgUrl,
-//                                           postItem.postType,postItem.timeStamp,postItem.userName,postItem.authToken)
+//        lifecycle.coroutineScope.launch{
+//            viewModel.getAllItems().collect(){
+//                for (postItem in it){
+////                    val post: Post = Post(postItem.postId,postItem.desc,postItem.imgUrl,
+////                                           postItem.postType,postItem.timeStamp,postItem.userName,postItem.authToken)
+////                    postList.add(post)
+//                    val post :GetPostResponseItem = GetPostResponseItem(postItem.postId,postItem.desc,postItem.imgUrl,
+//                    postItem.postType,null,null,postItem.userName)
 //                    postList.add(post)
-                    val post :GetPostResponseItem = GetPostResponseItem(postItem.postId,postItem.desc,postItem.imgUrl,
-                    postItem.postType,null,null,postItem.userName)
-                    postList.add(post)
-                }
-                val adapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,requireContext(),"Profile"){ post->
-                    showConfirmationDialog(post)
-                    postList.remove(post)
-
-                }
-                binding.savedPostRecView.adapter =adapter
-                binding.savedPostRecView.layoutManager = LinearLayoutManager(context)
-
-
-//                binding.feedBtn.setOnClickListener {
-//                    fragmentManager.beginTransaction()
-//                        .replace(R.id.flLayout,UserPostFragment())
-//                        .commit()
 //                }
+//                val adapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,requireContext(),"Profile"){ post->
+//                    showConfirmationDialog(post)
+//                    postList.remove(post)
 //
-//                binding.savedBtn.setOnClickListener {
-//                    fragmentManager.beginTransaction()
-//                        .replace(R.id.flLayout,BookmarkFragment())
-//                        .commit()
 //                }
-            }
-        }
+//                binding.savedPostRecView.adapter =adapter
+//                binding.savedPostRecView.layoutManager = LinearLayoutManager(context)
+//
+//
+////                binding.feedBtn.setOnClickListener {
+////                    fragmentManager.beginTransaction()
+////                        .replace(R.id.flLayout,UserPostFragment())
+////                        .commit()
+////                }
+////
+////                binding.savedBtn.setOnClickListener {
+////                    fragmentManager.beginTransaction()
+////                        .replace(R.id.flLayout,BookmarkFragment())
+////                        .commit()
+////                }
+//            }
+//        }
 
 
 
@@ -327,11 +335,11 @@ fun getUserDetails(context: Context){
 //    }
 
 
-//    private fun replaceFragment(fragment: Fragment) {
-//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.ProfileFragment, fragment)
-//        transaction.commit()
-//    }
+    private fun replaceFragment(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.profileframeLayout, fragment)
+        transaction.commit()
+    }
 
 //    private fun updateUserDetails() {
 //        val img_url=""

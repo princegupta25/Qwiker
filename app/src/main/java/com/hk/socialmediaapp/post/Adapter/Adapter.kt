@@ -30,7 +30,7 @@ class Adapter(
     }
 
     var prevholder: ViewHolder? = null
-
+//
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val image = images[position]
         if(prevholder==null && position==0){

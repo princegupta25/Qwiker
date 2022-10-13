@@ -7,4 +7,6 @@ data class Post(
     var owner_user_id: String = "",
     var post_type: String = "",
     var time_stamp: String = ""
+
+
 )

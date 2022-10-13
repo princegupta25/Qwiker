@@ -17,7 +17,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.lang.Exception
 
-class LogInActivity : AppCompatActivity() {
+class  LogInActivity : AppCompatActivity() {
     lateinit var  binding: ActivityLogInBinding
 
 //    private var retrofit: Retrofit? = null

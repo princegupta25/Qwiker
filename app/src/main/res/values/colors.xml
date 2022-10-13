@@ -30,13 +30,16 @@
     <color name="yellow">#FFE665</color>
     <color name="lime">#9DFF84</color>
     <color name="brown">#FFA6F1</color>
-    <color name="blue">#0C2CDD</color>
+<!--    <color name="blue">#0C2CDD</color>-->
     <color name="lightOrange">#FF8383</color>
     <color name="textBg">#FFFCF6</color>
 
     <color name="green">#037007</color>
     <color name="orange">#FF5722</color>
     <color name="blue_dark">#03136E</color>
+
+    <color name="blue">#2B5CAF</color>
+
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>

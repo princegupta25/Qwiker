@@ -1,0 +1,187 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/commentBottomSheet"
+    tools:context=".Comment.PostCommentActivity">
+
+
+    <LinearLayout
+        android:id="@+id/LLcomment"
+        android:layout_width="match_parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="55dp"
+        app:layout_constraintBottom_toTopOf="@id/RLcomment"
+
+        android:orientation="vertical">
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/caption"-->
+<!--            android:text="Caption!!"-->
+<!--            android:textSize="20sp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:textColor="@color/black"/>-->
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userpost_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:src="@drawable/profile_pic" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:textSize="20sp"
+                android:text="Shahrukh Khan"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/cross"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/cross" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/caption"
+            android:text="Caption!!"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+           android:layout_marginBottom="10dp"
+            android:textColor="@color/black"/>
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_marginTop="15px"-->
+<!--            android:text="This is my caption "/>-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="All Comments"/>
+
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/commentRV"
+            tools:listitem="@layout/comment_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+
+        <!--    <EditText-->
+        <!--        android:id="@+id/etComment"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="49dp"-->
+        <!--        android:hint="Comment here.."-->
+        <!--        android:elevation="30dp"-->
+        <!--        android:background="@drawable/custom_edittext"-->
+        <!--        android:textColor="@color/black"-->
+        <!--        android:paddingLeft="5dp"-->
+        <!--        android:paddingRight="5dp"-->
+        <!--        android:drawableRight="@drawable/comment_post"-->
+        <!--        tools:ignore="SpeakableTextPresentCheck" />-->
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RLcomment"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="50dp">
+
+
+<!--        <EditText-->
+<!--            android:id="@+id/etComment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="49dp"-->
+<!--            android:background="@drawable/custom_edittext"-->
+<!--            android:drawableRight="@drawable/comment_post"-->
+<!--            android:elevation="30dp"-->
+<!--            android:hint="Comment here.."-->
+<!--            android:paddingLeft="5dp"-->
+<!--            android:paddingRight="5dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent" >-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/commentPostIv"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/comment_post" />-->
+
+<!--        </EditText>-->
+
+
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/etComment"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:hint="Comment here.."
+        android:elevation="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@drawable/custom_edittext"
+        android:textColor="@color/black"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:drawableRight="@drawable/comment_post" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="postComment"
+        app:layout_constraintBottom_toTopOf="@+id/etComment"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

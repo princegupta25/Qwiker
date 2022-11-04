@@ -4,7 +4,7 @@ data class GetPostResponseItem(
 //    val __v: Int,
     val _id: String,
     val body: String?,
-    val comments: List<Any>?,
+    val comments: List<CommentItem>?,
 //    val createdAt: String,
     val likes: List<String>?,
     val photo: String?,

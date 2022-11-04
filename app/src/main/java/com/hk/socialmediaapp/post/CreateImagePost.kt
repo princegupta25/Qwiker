@@ -220,8 +220,9 @@ class CreateImagePost : AppCompatActivity() {
             Glide.with(this).load(it).into(binding.galleryImageView)
             mSelectedImage = it
             val uri = Uri.fromFile(File(mSelectedImage))
+            binding.progressBar.visibility = View.GONE
         }
-        binding.galaryImageRecView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        binding.galaryImageRecView.layoutManager = GridLayoutManager(this, 2)
         binding.galaryImageRecView.adapter = adapter
 
         if (imgURLs.isNotEmpty()) {

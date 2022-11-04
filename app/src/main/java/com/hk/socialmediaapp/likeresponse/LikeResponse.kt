@@ -10,5 +10,6 @@ data class LikeResponse(
     val postType: String,
     val postedBy: PostedBy,
     val title: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val createdAt: String
 )

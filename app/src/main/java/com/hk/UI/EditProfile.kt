@@ -1,6 +1,5 @@
 package com.hk.UI
 
-import android.R
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,18 +8,18 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.hk.socialmediaapp.MainActivity
 import com.hk.socialmediaapp.api.ApiClient
 import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.databinding.ActivityEditProfileBinding
 import com.hk.socialmediaapp.loginandsignup.RetrofitInterface
-import com.hk.socialmediaapp.profile.UserResponse
 import com.hk.socialmediaapp.profile.UserUpdateResponse
 import com.hk.socialmediaapp.utils.FileSearch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,13 +59,14 @@ class EditProfile : AppCompatActivity() {
         apiClient = ApiClient()
         sessionManager = SessionManager(this)
 
-        if(img_url!=null) {
-            val options: RequestOptions = RequestOptions()
-                .centerCrop()
-                .placeholder(com.hk.socialmediaapp.R.mipmap.ic_launcher_round)
-                .error(com.hk.socialmediaapp.R.mipmap.ic_launcher_round)
-            Glide.with(this).load(img_url).apply(options).into(binding.profileImage);
-        }
+        //temp
+//        if(img_url!=null) {
+//            val options: RequestOptions = RequestOptions()
+//                .centerCrop()
+//                .placeholder(com.hk.socialmediaapp.R.mipmap.ic_launcher_round)
+//                .error(com.hk.socialmediaapp.R.mipmap.ic_launcher_round)
+//            Glide.with(this).load(img_url).apply(options).into(binding.profileImage);
+//        }
 
 
         binding.changePhoto.setOnClickListener {
@@ -74,6 +74,7 @@ class EditProfile : AppCompatActivity() {
         }
         binding.doneBtn.setOnClickListener {
             editProfile()
+//            startActivity(Intent(this@EditProfile, ProfileFragment::class.java))
         }
 
     }
@@ -84,49 +85,93 @@ class EditProfile : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
             with(binding) {
                 profileImage.setImageURI(data?.data)
-
             } // handle chosen image
-//            selected_image_uri = data?.data
-            mSelectedImage = FileSearch.getRealPathFromURI(this, data?.data!!)
+            if (data?.data != null) {
+                uri = data?.data!!
+            }
 
-            uri = Uri.fromFile(File(mSelectedImage))
-//            Toast.makeText(this,uri.toString(), Toast.LENGTH_SHORT).show()
+            mSelectedImage = FileSearch.getRealPathFromURI(this, data?.data!!)
+//
+//            uri = Uri.fromFile(File(mSelectedImage))
+////            Toast.makeText(this,uri.toString(), Toast.LENGTH_SHORT).show()
+//
+            img_url=uri.toString()
 
         } else if (resultCode == Activity.RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
 
             with(binding) {
-
                 profileImage.setImageBitmap(data?.extras?.get("data") as Bitmap)
             }
 
-//            selected_image_uri = data?.data
-//            mSelectedImage = FileSearch.getRealPathFromURI(this, data?.data!!)
+            if (data?.data!=null) {
+                uri = data?.data!!
+            }
 
-            uri = Uri.fromFile(File(mSelectedImage))
-//            Toast.makeText(this,uri.toString(), Toast.LENGTH_SHORT).show()
-
-
+            mSelectedImage = FileSearch.getRealPathFromURI(this, data?.data!!)
+//
+//            uri = Uri.fromFile(File(mSelectedImage))
+////            Toast.makeText(this,uri.toString(), Toast.LENGTH_SHORT).show()
+//
+//
             img_url=uri.toString()
         }
+
+        val options: RequestOptions = RequestOptions()
+            .centerCrop()
+            .placeholder(com.hk.socialmediaapp.R.mipmap.ic_launcher_round)
+            .error(com.hk.socialmediaapp.R.mipmap.ic_launcher_round)
+        Glide.with(this).load(Uri.parse(img_url)).apply(options).into(binding.profileImage)
     }
 
     private fun editProfile() {
-        userName = binding.editUserName.text.toString()
-        userBio= binding.editBio.text.toString()
+        if(binding.editUserName.text.toString() != ""){
+            userName = binding.editUserName.text.toString()
+        }
+        if(binding.editBio.text.toString() != ""){
+            userBio= binding.editBio.text.toString()
+        }
         Log.d("editProifile",userName)
         Log.d("editProifile",userBio)
         Log.d("editProifile",img_url)
-
-
-//
-//        sessionManager.saveProfileImgUrl(img_url)
-//
-        if(userName!= "" && userBio != "" && img_url!=null){
-             //username,editbio,img_url to update
-            //api call for updating user data
+        if(userName==null){
+            userName=sessionManager.fetchUserName().toString()
+        }
+        if (userBio==null){
+            userBio="Update your bio"
+        }
+        if (img_url==null){
+            img_url="noimage"
+        }
             try {
+//                val filesDir = applicationContext.filesDir
+//                val file = File(filesDir,"image.png")
+//
+//                val inputStream = contentResolver.openInputStream(uri)
+//                val outputStream = FileOutputStream(file)
+//                inputStream!!.copyTo(outputStream)
+//
+//                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+//                val part = MultipartBody.Part.createFormData("imageUrl",file.name,requestBody)
+
+                val file: File = File(mSelectedImage)
+
+                val reqFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                val part = MultipartBody.Part.createFormData("imageUrl", file.name, reqFile)
+
+                val about: RequestBody = RequestBody.create(
+                    "text/plain".toMediaTypeOrNull(),
+                    userBio
+                )
+
+                val username: RequestBody = RequestBody.create(
+                    "text/plain".toMediaTypeOrNull(),
+                    userName
+                )
+
+                sessionManager.saveUserName(userName)
+
                 apiClient.getretrofitService(this)
-                    .updateUser(userName,userBio,img_url)
+                    .updateUser(part,about,username)
                     .enqueue(object : Callback<UserUpdateResponse> {
                         override fun onFailure(call: Call<UserUpdateResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, "error1", Toast.LENGTH_SHORT)
@@ -138,20 +183,16 @@ class EditProfile : AppCompatActivity() {
                             response: Response<UserUpdateResponse>
                         ) {
                             val userUpdateResponse: UserUpdateResponse? = response.body()
-                            Log.d("editProfile",userUpdateResponse.toString())
-                            Log.d("editProfile",response.toString())
-                            Log.d("editProfile",response.body().toString())
-                            if (response.isSuccessful) {
+
+                                if (response.isSuccessful) {
                                 if (userUpdateResponse != null) {
                                     if(userUpdateResponse.success == true){
                                         Toast.makeText(this@EditProfile,userUpdateResponse.message,Toast.LENGTH_SHORT).show()
                                     }else{
                                         Toast.makeText(this@EditProfile,"Couldn't update",Toast.LENGTH_SHORT).show()
                                     }
-//                                    Toast.makeText(applicationContext,userResponse.username,Toast.LENGTH_SHORT).show()
-//                                    Toast.makeText(applicationContext,userResponse.about,Toast.LENGTH_SHORT).show()
                                 }
-                                startActivity(Intent(this@EditProfile, ProfileFragment::class.java))
+                                startActivity(Intent(this@EditProfile, MainActivity::class.java))
                             } else {
                                 Toast.makeText(applicationContext, "Error4", Toast.LENGTH_SHORT)
                                     .show()
@@ -161,7 +202,6 @@ class EditProfile : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
-        }
     }
 
     private fun openGalleryForImage() {
@@ -171,3 +211,24 @@ class EditProfile : AppCompatActivity() {
     }
 
 }
+
+//
+//val filesDir = applicationContext.filesDir
+//val file = File(filesDir,"image.png")
+//
+//val inputStream = contentResolver.openInputStream(uri)
+//val outputStream = FileOutputStream(file)
+//inputStream!!.copyTo(outputStream)
+//
+//val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+//val part = MultipartBody.Part.createFormData("imageUrl",file.name,requestBody)
+//
+//val about: RequestBody = RequestBody.create(
+//    "text/plain".toMediaTypeOrNull(),
+//    userBio
+//)
+//
+//val username: RequestBody = RequestBody.create(
+//    "text/plain".toMediaTypeOrNull(),
+//    userName
+//)

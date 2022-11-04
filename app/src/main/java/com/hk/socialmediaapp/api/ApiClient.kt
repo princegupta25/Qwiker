@@ -10,7 +10,9 @@ import retrofit2.http.HTTP
 
 class ApiClient{
     private lateinit var retrofitInterface: RetrofitInterface
-    val BASE_URL = "https://social11.herokuapp.com/api/"
+//    val BASE_URL = "https://social11.herokuapp.com/api/"
+    val BASE_URL = "https://social11.onrender.com/api/"
+//    val BASE_URL = "https://social11.onrender.com/"
 
     fun getretrofitService(context: Context): RetrofitInterface{
 

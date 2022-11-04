@@ -2,6 +2,7 @@ package com.hk.UI
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -104,9 +105,9 @@ class UserPostFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(postList: GetPostResponse,context: Context) {
-        feedAdapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,context,"Profile",null){
+        feedAdapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,context,"Profile",null){ getPostResponseItem,position->
             // to delete post from database and bookmarked posts...
-            showConfirmationDialog(context,it)
+            showConfirmationDialog(context,getPostResponseItem,position)
             Toast.makeText(context, "recycler", Toast.LENGTH_SHORT).show()
         }
 
@@ -118,7 +119,11 @@ class UserPostFragment : Fragment() {
         }
     }
 
-    private fun showConfirmationDialog(context: Context,post: GetPostResponseItem) {
+    private fun deleteFromAdapter(position: Int){
+        feedAdapter.remove(position)
+    }
+
+    private fun showConfirmationDialog(context: Context,post: GetPostResponseItem,position: Int) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(android.R.string.dialog_alert_title))
             .setMessage(getString(R.string.delete_question))
@@ -127,6 +132,7 @@ class UserPostFragment : Fragment() {
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 deletePost(context,post._id)
                 deleteItem(post)
+                deleteFromAdapter(position)
             }.show()
     }
 //
@@ -134,11 +140,12 @@ class UserPostFragment : Fragment() {
         //here we should make postId as primary key and for that we have to modify database ans version schema
         val postItem = PostItem(postId = post._id, desc = post.body,
             imgUrl = post.photo, timeStamp = post.postedBy!!.date,
-            postType = post.postType, userName = post.postedBy.username, authToken = "will look later")
+            postType = post.postType, userName = post.postedBy.username, authToken = "will look later", likeNo = post.likes!!.size.toString())
         viewModel.deletePostItem(postItem)
     }
 
     private fun deletePost(context: Context,postId: String){
+        Log.d("postId",postId)
         try {
             apiClient.getretrofitService(context)
                 .deletePost(postId)

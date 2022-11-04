@@ -11,9 +11,13 @@ import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.databinding.ActivityCreateTextPostBinding
 import com.hk.socialmediaapp.loginandsignup.LogInActivity
 import com.hk.socialmediaapp.profile.PostResponse
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class CreateTextPost : AppCompatActivity() {
     private lateinit var binding: ActivityCreateTextPostBinding
@@ -31,15 +35,6 @@ class CreateTextPost : AppCompatActivity() {
         sessionManager = SessionManager(this)
 
         binding.nextBtn.setOnClickListener {
-//            var desc: String = binding.descPostEt.text.toString()
-//            var post= Post(sessionManager.fetchUserName().toString()+System.currentTimeMillis(),
-//                desc,null,
-//                "TextPost",System.currentTimeMillis().toString(),
-//                sessionManager.fetchUserName().toString(),
-//                sessionManager.fetchAuthToken().toString())
-            //upload text post
-//            PostList.addItem(post)
-//            Toast.makeText(this,"posted",Toast.LENGTH_SHORT).show()
             uploadTextPost()
             val intent= Intent(this, MainActivity::class.java)
             finishAffinity()
@@ -53,11 +48,41 @@ class CreateTextPost : AppCompatActivity() {
     }
 
     private fun uploadTextPost(){
-        val body= binding.bodyPostEt.toString()
-        val title = binding.titleEt.toString()
+        val bodyText= binding.bodyPostEt.text.toString()
+        val titleText = binding.titleEt.text.toString()
         val userName = sessionManager.fetchUserName().toString()
+
+
+
+        val file: File = File("noimage.png")
+
+        val reqFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        val part = MultipartBody.Part.createFormData("photo", file.name, reqFile)
+
+        val title: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            titleText
+        )
+
+        val body: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            bodyText
+        )
+
+        val postType: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            "text"
+        )
+
+        val username: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            userName
+        )
+
+
+
         apiClient.getretrofitService(this)
-            .createPost(null,title,body,"text",userName)
+            .createPost(part,title,body,postType,username)
             .enqueue(object : Callback<PostResponse> {
                 override fun onResponse(
                     call: Call<PostResponse>,
@@ -81,7 +106,6 @@ class CreateTextPost : AppCompatActivity() {
                 override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                     Toast.makeText(this@CreateTextPost, "Network Issue", Toast.LENGTH_SHORT).show()
                 }
-
             })
     }
 }

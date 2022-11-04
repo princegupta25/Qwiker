@@ -37,6 +37,7 @@ class BookmarkFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
     private lateinit var apiClient: ApiClient
     private lateinit var postList: MutableList<GetPostResponseItem>
+    private lateinit var adapter: FeedPostAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +73,8 @@ class BookmarkFragment : Fragment() {
                         postItem.postType,null,null,postItem.userName)
                     postList.add(post)
                 }
-                val adapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,requireContext(),"Bookmark",null){ post->
-                    showConfirmationDialog(post)
-                    postList.remove(post)
+                adapter = FeedPostAdapter(postList as ArrayList<GetPostResponseItem> ,requireContext(),"Bookmark",null){ post,position->
+                    showConfirmationDialog(post,position)
                 }
                 binding.savedPostRecView.adapter =adapter
                 binding.savedPostRecView.layoutManager = LinearLayoutManager(context)
@@ -84,8 +84,11 @@ class BookmarkFragment : Fragment() {
 
     }
 
+    private fun deleteFromAdapter(position: Int){
+        adapter.remove(position)
+    }
 
-    private fun showConfirmationDialog(post: GetPostResponseItem) {
+    private fun showConfirmationDialog(post: GetPostResponseItem,position: Int) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(android.R.string.dialog_alert_title))
             .setMessage(getString(R.string.delete_question))
@@ -93,6 +96,7 @@ class BookmarkFragment : Fragment() {
             .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 deleteItem(post)
+                deleteFromAdapter(position)
             }.show()
     }
 
@@ -106,7 +110,8 @@ class BookmarkFragment : Fragment() {
                 timeStamp = post.postedBy!!.date,
                 postType = post.postType,
                 userName = post.postedBy.username,
-                authToken = "will look later"
+                authToken = "will look later",
+                likeNo = post.likes!!.size.toString()
             )
             viewModel.deletePostItem(postItem)
         }catch (e: Exception){

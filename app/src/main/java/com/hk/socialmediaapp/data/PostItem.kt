@@ -22,5 +22,7 @@ data class PostItem(
     @ColumnInfo(name = "user_name")
     val userName: String?,
     @ColumnInfo(name = "auth_token")
-    val authToken: String
+    val authToken: String,
+    @ColumnInfo(name = "like_no")
+    val likeNo: String
 )

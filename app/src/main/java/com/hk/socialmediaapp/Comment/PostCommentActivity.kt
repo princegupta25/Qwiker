@@ -12,6 +12,7 @@ import com.hk.socialmediaapp.R
 import com.hk.socialmediaapp.api.ApiClient
 import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.databinding.ActivityPostCommentBinding
+import com.hk.socialmediaapp.likeresponse.LikeResponse
 import com.hk.socialmediaapp.post.Adapter.CommentAdapter
 import com.hk.socialmediaapp.profile.CommentItem
 import com.hk.socialmediaapp.profile.UserResponse
@@ -28,6 +29,7 @@ class PostCommentActivity : AppCompatActivity() {
 
     private lateinit var sessionManager: SessionManager
     private lateinit var apiClient: ApiClient
+    private lateinit var commentList: MutableList<CommentItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,17 +50,21 @@ class PostCommentActivity : AppCompatActivity() {
             .into(binding.userpostImage)
 
         binding.caption.text = caption
-        Log.d("postactive", CommentList.commentList.toString())
 
-        adapter = CommentAdapter(this, CommentList.commentList!!)
+        commentList=CommentList.commentList!!
 
-        Log.d("postactive", CommentList.commentList.toString())
+        adapter = CommentAdapter(this, commentList)
         binding.commentRV.layoutManager = LinearLayoutManager(this)
         binding.commentRV.adapter = adapter
 
         binding.btn.setOnClickListener {
             val comment = binding.etComment.text.toString()
             postComment(comment,this,postId.toString())
+            val commentItem: CommentItem = CommentItem("1",comment,postId!!,comment,sessionManager.fetchUserId().toString())
+            commentList.add(commentItem)
+            adapter = CommentAdapter(this,commentList)
+            binding.commentRV.layoutManager = LinearLayoutManager(this)
+            binding.commentRV.adapter = adapter
         }
 
     }
@@ -67,8 +73,8 @@ class PostCommentActivity : AppCompatActivity() {
         try {
             apiClient.getretrofitService(context)
                 .postComment(comment, comment, postId)
-                .enqueue(object : Callback<String>{
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                .enqueue(object : Callback<LikeResponse>{
+                    override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
                         val postResponse = response.body()
                         if(response.isSuccessful){
                             Toast.makeText(context,"Successfully posted",Toast.LENGTH_SHORT).show()
@@ -77,7 +83,7 @@ class PostCommentActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<String>, t: Throwable) {
+                    override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
                        Toast.makeText(context,"Network Error",Toast.LENGTH_SHORT).show()
                     }
 

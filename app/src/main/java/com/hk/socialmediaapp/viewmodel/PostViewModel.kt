@@ -32,10 +32,10 @@ class PostViewModel(private val postItemDao: PostItemDao): ViewModel() {
 //        return savedPostItems
 //    }
 
-    private fun getNewPostItem(postId: String,desc: String?,imgUrl : String?,postType: String,timeStamp: String,userName: String,authToken: String): PostItem{
+    private fun getNewPostItem(postId: String,desc: String?,imgUrl : String?,postType: String,timeStamp: String,userName: String,authToken: String,likeNo: String): PostItem{
         return PostItem(postId = postId, desc = desc, imgUrl = imgUrl,
             postType = postType, timeStamp = timeStamp,
-           userName = userName, authToken = authToken
+           userName = userName, authToken = authToken, likeNo = likeNo
         )
     }
 

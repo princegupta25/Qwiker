@@ -15,7 +15,7 @@ import com.hk.socialmediaapp.utils.CommentList
 class CommentAdapter (
     private val context: Context,
 //    private val list: ArrayList<CommentItem>
-    private val list: List<Any>
+    private val list: List<CommentItem>
         ):RecyclerView.Adapter<CommentAdapter.CommentViewHolder>(
 ){
 
@@ -31,9 +31,9 @@ class CommentAdapter (
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         Log.d("adaptercomment",position.toString())
         Log.d("adaptercomment",list[position].toString())
-        val comment : Any = list[position]
-        Log.d("fuck",comment.toString())
-        holder.userComment.text = comment.toString()
+        val comment : CommentItem = list[position]
+
+        holder.userComment.text = comment.text
 
     }
 

@@ -218,9 +218,9 @@ class FeedFragment : Fragment() {
                 //code for unliking the post
                 unlikePost(context,postId)
             }
-        }){
+        }){ getPostResponseItem,i->
             Log.d("harsh",feedAdapter.toString())
-            savePostItem(it)
+            savePostItem(getPostResponseItem)
         }
 
 
@@ -235,7 +235,7 @@ class FeedFragment : Fragment() {
        try {
            val postItem = PostItem(postId = getPostResponseItem._id, desc = getPostResponseItem.body,
                imgUrl = getPostResponseItem.photo, timeStamp = getPostResponseItem.postedBy!!.date ?: "hii",
-               postType = getPostResponseItem.postType, userName = getPostResponseItem.postedBy.username, authToken = "will check later")
+               postType = getPostResponseItem.postType, userName = getPostResponseItem.postedBy.username, authToken = "will check later", likeNo = getPostResponseItem.likes!!.size.toString())
            viewModel.addNewPostItem(postItem)
 
        }catch (e: Exception){

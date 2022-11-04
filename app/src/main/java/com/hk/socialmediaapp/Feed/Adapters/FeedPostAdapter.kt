@@ -47,20 +47,18 @@ class FeedPostAdapter(
     //2
     val tag: String,
     val listener2: ((String,Boolean) -> Unit)?,
-    val listener: (GetPostResponseItem) -> Unit
+    val listener: (GetPostResponseItem,Int) -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(
 ) {
 
-//    var list = PostList.getList()
-
-//    val list: ArrayList<Post> = arrayListOf()
-//
-//    fun submitData(post: List<Post>) {
-//        this.list.clear()
-//        this.list.addAll(post)
-//    }
 
     val sessionManager: SessionManager = SessionManager(context)
+
+    fun remove(position: Int) {
+        // Remove and notify the adapter to reload
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
 
     class ImagePostViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -73,6 +71,8 @@ class FeedPostAdapter(
         val comment=itemView.findViewById<CardView>(R.id.cardComment)
         val commentIcon = itemView.findViewById<ImageView>(R.id.commentIcon)
         val shareCard=itemView.findViewById<CardView>(R.id.shareCard)
+
+        val likeNo = itemView.findViewById<TextView>(R.id.likeNo)
         var isLiked:Boolean = false
         var isBookmarked:Boolean = false
 //         val commentBottomSheet = itemView.findViewById<LinearLayout>(R.id.commentBottomSheet)
@@ -86,25 +86,30 @@ class FeedPostAdapter(
         val like =itemView.findViewById<ImageView>(R.id.likeIcon)
 
          @RequiresApi(Build.VERSION_CODES.M)    // added at 2
-         fun bind(getPostResponseItem: GetPostResponseItem, context: Context,tag: String,listener2: ((String,Boolean) -> Unit?)?, listener: (GetPostResponseItem) -> Unit,sessionManager: SessionManager){
+         fun bind(getPostResponseItem: GetPostResponseItem, context: Context,tag: String,listener2: ((String,Boolean) -> Unit?)?, listener: (GetPostResponseItem,Int) -> Unit,sessionManager: SessionManager,position: Int){
 //             if(getPostResponseItem.postedBy!!.username!=null && getPostResponseItem.postedBy!!.imageUrl!=null){
 //             userName.text=getPostResponseItem.postedBy!!.username
-             if (getPostResponseItem!=null && getPostResponseItem.postedBy!= null && getPostResponseItem.postedBy.imageUrl != null){
-             Glide.with(context!!).load(getPostResponseItem.postedBy.imageUrl.subSequence(19,getPostResponseItem.postedBy.imageUrl.length)).error(R.drawable.person_user)
-                 .into(profile_image)
-                 }
 
+//             if (getPostResponseItem!=null && getPostResponseItem.postedBy!= null && getPostResponseItem.postedBy.imageUrl != null){
+//             Glide.with(context!!).load(getPostResponseItem.postedBy.imageUrl.subSequence(19,getPostResponseItem.postedBy.imageUrl.length)).error(R.drawable.person_user)
+//                 .into(profile_image)
+//                 }
 
-             Log.d("adaptercheck",getPostResponseItem.photo.toString())
-             if (getPostResponseItem.photo!=null) {
-                 Glide.with(context!!).load(
-                     getPostResponseItem.photo.subSequence(
-                         19,
-                         getPostResponseItem.photo.length
-                     )
-                 ).error(R.drawable.person_user)
-                     .into(image_post)
+             if (getPostResponseItem!= null && getPostResponseItem.likes!=null){
+                 likeNo.text = getPostResponseItem.likes.size.toInt().toString()
              }
+
+
+//             Log.d("adaptercheck",getPostResponseItem.photo.toString())
+//             if (getPostResponseItem.photo!=null) {
+//                 Glide.with(context!!).load(
+//                     getPostResponseItem.photo.subSequence(
+//                         19,
+//                         getPostResponseItem.photo.length
+//                     )
+//                 ).error(R.drawable.person_user)
+//                     .into(image_post)
+//             }
 
              //2
              if(tag == "Profile" || tag =="Bookmark"){
@@ -131,18 +136,12 @@ class FeedPostAdapter(
 
              imageBookmark.setOnClickListener {
                  if(tag=="Feed"){
-//                     if(post.isLiked==true){
-//                         bookmarkIcon.setImageDrawable(context.getDrawable(R.drawable.bookmarkred))
-//                     }else{
-//                         bookmarkIcon.setImageDrawable(context.getDrawable(R.drawable.ic_bookmark_24))
-//                     }
-
 
                      bookmarkIcon.setImageDrawable(context.getDrawable(R.drawable.bookmarkred))
                      bookmarkIcon.startAnimation(AnimationUtils.loadAnimation(context,R.anim.pulse))
                      imageBookmark.isEnabled = false
                  }
-                 listener(getPostResponseItem)
+                 listener(getPostResponseItem,position)
              }
 
              if (tag!="Bookmark") {
@@ -169,7 +168,7 @@ class FeedPostAdapter(
                  comment.setOnClickListener {
 
 //                CommentList.commentList = getPostResponseItem.comments as ArrayList<CommentItem>
-                     CommentList.commentList = getPostResponseItem.comments
+                     CommentList.commentList = getPostResponseItem.comments as MutableList<CommentItem>
 
 
                      val intent = Intent(context, PostCommentActivity::class.java)
@@ -200,19 +199,37 @@ class FeedPostAdapter(
                  }
              }
 
+             var count=0
+             if (getPostResponseItem.likes!=null) {
+                 count = getPostResponseItem.likes.size.toInt();
+             }
+
              like.setOnClickListener {
                  if(isLiked==false){
                      isLiked = true
                      like.setImageDrawable(context.getDrawable(R.drawable.heart))
                      like.startAnimation(AnimationUtils.loadAnimation(context,R.anim.pulse))
+//                     if (getPostResponseItem.likes!=null) {
+////                         val count = getPostResponseItem.likes.size.toInt() + 1;
+//                          likeNo.text = count.toString()
+//                     }
                      //like increase code
-
+                        count++
+                     likeNo.text = count.toString()
                  }else{
                      isLiked=false
                      like.setImageDrawable(context.getDrawable(R.drawable.ic_heart_bold))
                      like.startAnimation(AnimationUtils.loadAnimation(context,R.anim.pulse))
+//                     if (getPostResponseItem.likes!=null) {
+////                         val count = getPostResponseItem.likes.size.toInt() - 1;
+//                         likeNo.text = count.toString()
+//                     }
                      //like decrease code
-
+                     count--
+                     likeNo.text=count.toString()
+                 }
+                 if (listener2 != null) {
+                     listener2(getPostResponseItem._id,isLiked)
                  }
              }
          }
@@ -227,6 +244,8 @@ class FeedPostAdapter(
         val shareCard=itemView.findViewById<CardView>(R.id.shareCard)
         var isLiked:Boolean = false
         var isBookmarked: Boolean = false
+
+        val likeNo = itemView.findViewById<TextView>(R.id.likeNo)
         //         val commentBottomSheet = itemView.findViewById<LinearLayout>(R.id.commentBottomSheet)
 //        private lateinit var sheetBinding: FragmentCommentFragemntBinding
 //        lateinit var bottomSheetDialog: BottomSheetDialog
@@ -237,11 +256,11 @@ class FeedPostAdapter(
         val bookmarkIcon = itemView.findViewById<ImageView>(R.id.bookmarkIcon)
         val share =itemView.findViewById<ImageView>(R.id.shareView)
         val like =itemView.findViewById<ImageView>(R.id.likeIcon)
-        fun bind(getPostResponseItem: GetPostResponseItem,context: Context,tag: String,listener2: ((String,Boolean) -> Unit?)?, listener: (GetPostResponseItem) -> Unit,sessionManager: SessionManager){
-           if (getPostResponseItem!=null && getPostResponseItem.postedBy!= null && getPostResponseItem.postedBy.imageUrl != null){
-             Glide.with(context!!).load(getPostResponseItem.postedBy.imageUrl.subSequence(19,getPostResponseItem.postedBy.imageUrl.length)).error(R.drawable.person_user)
-                 .into(profile_image)
-                 }
+        fun bind(getPostResponseItem: GetPostResponseItem,context: Context,tag: String,listener2: ((String,Boolean) -> Unit?)?, listener: (GetPostResponseItem,Int) -> Unit,sessionManager: SessionManager,position: Int){
+//           if (getPostResponseItem!=null && getPostResponseItem.postedBy!= null && getPostResponseItem.postedBy.imageUrl != null){
+//             Glide.with(context!!).load(getPostResponseItem.postedBy.imageUrl.subSequence(19,getPostResponseItem.postedBy.imageUrl.length)).error(R.drawable.person_user)
+//                 .into(profile_image)
+//                 }
             text_post.text = getPostResponseItem.body
             //2
             if(tag == "Profile" || tag =="Bookmark"){
@@ -265,6 +284,10 @@ class FeedPostAdapter(
 
             }
 
+            if (getPostResponseItem!= null && getPostResponseItem.likes!=null){
+                likeNo.text = getPostResponseItem.likes.size.toInt().toString()
+            }
+
             textBookmark.setOnClickListener {
                     if(tag=="Feed"){
 //                     if(post.isLiked=true){
@@ -275,7 +298,7 @@ class FeedPostAdapter(
                         bookmarkIcon.setImageDrawable(context.getDrawable(R.drawable.bookmarkred))
                         textBookmark.isEnabled = false
                     }
-                listener(getPostResponseItem)
+                listener(getPostResponseItem,position)
             }
 
             if(tag!="Bookmark") {
@@ -302,7 +325,7 @@ class FeedPostAdapter(
                 comment.setOnClickListener {
 
 //                CommentList.commentList = getPostResponseItem.comments as ArrayList<CommentItem>
-                    CommentList.commentList = getPostResponseItem.comments
+                    CommentList.commentList = getPostResponseItem.comments as MutableList<CommentItem>
 
 
                     val intent = Intent(context, PostCommentActivity::class.java)
@@ -333,19 +356,35 @@ class FeedPostAdapter(
             }
 
 
+            var count=0
+            if (getPostResponseItem.likes!=null) {
+                count = getPostResponseItem.likes.size.toInt();
+            }
+
             like.setOnClickListener {
                 if (isLiked == false) {
                     isLiked = true
                     like.setImageDrawable(context.getDrawable(R.drawable.heart))
                     like.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pulse))
+//                    if (getPostResponseItem.likes!=null) {
+//                        val count = getPostResponseItem.likes.size.toInt() + 1;
+//                        likeNo.text = count.toString()
+//                    }
                     //like increase code
-
+                    count++
+                    likeNo.text = count.toString()
 
                 } else {
                     isLiked = false
                     like.setImageDrawable(context.getDrawable(R.drawable.ic_heart_bold))
                     like.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pulse))
                     //like decrease code
+//                    if (getPostResponseItem.likes!=null) {
+//                        val count = getPostResponseItem.likes.size.toInt() - 1;
+//                        likeNo.text = count.toString()
+//                    }
+                    count--
+                    likeNo.text = count.toString()
                 }
                 if (listener2 != null) {
                     listener2(getPostResponseItem._id,isLiked)
@@ -393,27 +432,12 @@ class FeedPostAdapter(
     @RequiresApi(Build.VERSION_CODES.M)   //added at 2
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == IMAGE_POST) {
-            (holder as ImagePostViewHolder).bind(list[position],context,tag,listener2,listener,sessionManager)
+            (holder as ImagePostViewHolder).bind(list[position],context,tag,listener2,listener,sessionManager,position)
         }  else  {
-            (holder as TextPostViewHolder).bind(list[position],context,tag,listener2,listener,sessionManager)
+            (holder as TextPostViewHolder).bind(list[position],context,tag,listener2,listener,sessionManager,position)
         }
     }
 
     override fun getItemCount(): Int = list.size
 
 }
-
-
-
-
-
-//    if(bookmarkIcon.backgroundTintList ==context.getColorStateList(R.color.white)){
-//        val redColor = context.resources.getColor(R.color.red)
-//        bookmarkIcon.setImageDrawable()
-//    }else{
-//        val redColor = context.resources.getColor(R.color.white)
-//        imageBookmark.setCardBackgroundColor(redColor)
-//    }
-
-//val redColor = context.resources.getColor(R.color.red)
-//textBookmark.setCardBackgroundColor(redColor)

@@ -213,7 +213,6 @@ class ProfileFragment : Fragment() {
 
         bottomSheetDialog.findViewById<TextView>(R.id.tvEditProfile)!!.setOnClickListener {
             //edit name
-//            Toast.makeText(context, "edit profile", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, EditProfile::class.java)
                 .putExtra("USER_NAME",userName)
                 .putExtra("IMG_URL",img_url)
@@ -307,7 +306,8 @@ fun getUserDetails(context: Context){
                                 .centerCrop()
                                 .placeholder(R.mipmap.ic_launcher_round)
                                 .error(R.mipmap.ic_launcher_round)
-                            Glide.with(context).load(userResponse.imageUrl).apply(options).error(R.drawable.person_user).into(binding.profileImage)
+//                            Glide.with(context).load(userResponse.imageUrl?.subSequence(17,
+//                                userResponse.imageUrl!!.length)).apply(options).error(R.drawable.person_user).into(binding.profileImage)
 
 
 //                            Toast.makeText(context,userResponse.username,Toast.LENGTH_SHORT).show()
@@ -315,7 +315,6 @@ fun getUserDetails(context: Context){
 //                            Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
                         }
                         Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show()
-//                                startActivity(Intent(this@EditProfile, ProfileFragment::class.java))
                     } else {
                         Toast.makeText(context, "Error4", Toast.LENGTH_SHORT)
                             .show()
@@ -417,7 +416,7 @@ fun getUserDetails(context: Context){
         //here we should make postId as primary key and for that we have to modify database ans version schema
         val postItem = PostItem(postId = post._id, desc = post.body,
             imgUrl = post.photo, timeStamp = post.postedBy!!.date,
-            postType = post.postType, userName = post.postedBy.username, authToken = "will look later")
+            postType = post.postType, userName = post.postedBy.username, authToken = "will look later",likeNo = post.likes!!.size.toString())
             viewModel.deletePostItem(postItem)
     }
 

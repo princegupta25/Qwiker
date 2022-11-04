@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.isInvisible
 import com.hk.socialmediaapp.MainActivity
@@ -16,6 +17,9 @@ import com.hk.socialmediaapp.api.SessionManager
 import com.hk.socialmediaapp.databinding.ActivityImagePostReviewBinding
 import com.hk.socialmediaapp.profile.PostResponse
 import com.hk.socialmediaapp.utils.Constants
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +39,7 @@ class ImagePostReviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityImagePostReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val path=intent.getStringExtra(Constants.FILE_PATH)
         var imgfile: File? = null
 
@@ -46,44 +51,58 @@ class ImagePostReviewActivity : AppCompatActivity() {
         imgfile= File(path)
         val mybitmap: Bitmap = BitmapFactory.decodeFile(imgfile.path);
         binding.galleryImageView.setImageBitmap(mybitmap)
+        binding.progressBar.visibility=View.GONE
         outputUri= Uri.fromFile(File(path))
-//        editPhoto()
+
         binding.doneBtn.setOnClickListener{
-//            var post= Post(sessionManager.fetchUserName().toString()+System.currentTimeMillis(),
-//                null,path,
-//                "ImagePost",System.currentTimeMillis().toString(),
-//                sessionManager.fetchUserName().toString(),
-//                sessionManager.fetchAuthToken().toString())
-//            PostList.addItem(post)
 
            uploadImagePost()
-
-            //function call to post this image post
-//            Toast.makeText(this,"posted",Toast.LENGTH_SHORT).show()
-            val intent= Intent(this, MainActivity::class.java)
-            finishAffinity()
-            startActivity(intent)
+//
+//            val intent= Intent(this, MainActivity::class.java)
+//            finishAffinity()
+//            startActivity(intent)
         }
 
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(resultCode== RESULT_OK)
-        {
-            outputUri= data?.data!!
-            binding.galleryImageView.setImageURI(outputUri)
-            binding.progressBar.isInvisible
-        }
-    }
 
     private fun uploadImagePost(){
-        val body= binding.bodyPostEt.toString()
+        val bodyText= binding.bodyPostEt.text.toString()
         val userName = sessionManager.fetchUserName().toString()
+        Log.d("imagePost",bodyText)
+        Log.d("imagePost",userName)
+        Log.d("imagePost",apiClient.toString())
+        Log.d("imagePost",outputUri.toString())
+
+
+        val file: File = File(path)
+
+        val reqFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        val part = MultipartBody.Part.createFormData("photo", file.name, reqFile)
+
+        val title: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            "title"
+        )
+
+        val body: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            bodyText
+        )
+
+        val postType: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            "image"
+        )
+
+        val username: RequestBody = RequestBody.create(
+            "text/plain".toMediaTypeOrNull(),
+            userName
+        )
+
         apiClient.getretrofitService(this)
-            .createPost(path,null,body,"image",userName)
+            .createPost(part,title,body,postType,username)
             .enqueue(object : Callback<PostResponse>{
                 override fun onResponse(
                     call: Call<PostResponse>,
@@ -111,20 +130,5 @@ class ImagePostReviewActivity : AppCompatActivity() {
             })
     }
 
-//    private fun editPhoto()
-//    {
-//        val dsPhotoEditorIntent = Intent(this, DsPhotoEditorActivity::class.java)
-//        dsPhotoEditorIntent.data = outputUri
-//
-//        dsPhotoEditorIntent.putExtra(DsPhotoEditorConstants.DS_PHOTO_EDITOR_OUTPUT_DIRECTORY, "Vasukam Images")
-//
-//        val toolsToHide =
-//            intArrayOf(DsPhotoEditorActivity.TOOL_ORIENTATION, DsPhotoEditorActivity.TOOL_CROP)
-//
-//        dsPhotoEditorIntent.putExtra(
-//            DsPhotoEditorConstants.DS_PHOTO_EDITOR_TOOLS_TO_HIDE,
-//            toolsToHide
-//        )
-//        startActivityForResult(dsPhotoEditorIntent, 200)
-//    }
+
 }
